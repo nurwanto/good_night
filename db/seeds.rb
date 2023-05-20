@@ -5,3 +5,18 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+BedTimeHistory.destroy_all
+User.destroy_all
+
+5.times do |index|
+  user = User.create!(name: "jhon_doe_#{index}")
+  4.times do |idx|
+    min_date = Time.now - (idx + 1).days
+    max_date = Time.now - idx.days
+    bed_time = rand(min_date..max_date)
+    wake_up_time = rand(bed_time..max_date)
+
+    BedTimeHistory.create!(user_id: user.id, bed_time: bed_time, wake_up_time: wake_up_time)
+  end
+end
