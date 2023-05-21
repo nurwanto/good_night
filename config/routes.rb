@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'bed_time' => 'bed_time#history'
+      get 'bed_time/:user_id' => 'bed_time#history'
     end
   end
 end
