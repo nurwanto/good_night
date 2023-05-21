@@ -7,8 +7,8 @@ Rails.application.routes.draw do
       post 'bed_time/set_unset' => 'bed_time#set_unset'
 
       post 'follow' => 'follow#action'
-      # get 'follow/followers' => 'follow#get_followers'
-      # get 'follow/followed' => 'follow#get_followed'
+      get 'follow/followers' => 'follow#get_followers'
+      get 'follow/followed' => 'follow#get_followed'
     end
   end
 end

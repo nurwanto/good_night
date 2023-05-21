@@ -16,19 +16,19 @@ module Api
                         status: :not_found
         end
 
-        followers = if params[:user_id].present?
-                      current_user.followers.where(id: params[:user_id])
-                    else
-                      current_user.followers
-                    end
+        followed = if params[:user_id].present?
+                     current_user.followed.where(id: params[:user_id])
+                   else
+                     current_user.followed
+                   end
 
-        if followers.blank?
-          return render json: { error_message: 'empty followers' },
+        if followed.blank?
+          return render json: { error_message: 'You have not followed anyone yet' },
                         status: :not_found
         end
 
         data = []
-        followers.each do |follower|
+        followed.each do |follower|
           bed_time_histories = follower.bed_time_histories.map do |x|
             { bed_time: x.bed_time, wake_up_time: x.wake_up_time, duration: (x.wake_up_time - x.bed_time) }
           end

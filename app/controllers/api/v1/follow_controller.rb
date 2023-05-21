@@ -53,6 +53,36 @@ module Api
 
         render json: { message: "you have successfully #{params&.dig(:follow, :action)} user #{target_user.id}" }
       end
+
+      def get_followers
+        if params[:current_user_id].blank?
+          return render json: { error_message: 'current_user_id should be exist' },
+                        status: :bad_request
+        end
+
+        current_user = User.find_by(id: params[:current_user_id])
+        if current_user.blank?
+          render json: { error_message: "user_id #{params[:current_user_id]} not exist" },
+                 status: :not_found
+        end
+
+        render json: { data: current_user.followers }
+      end
+
+      def get_followed
+        if params[:current_user_id].blank?
+          return render json: { error_message: 'current_user_id should be exist' },
+                        status: :bad_request
+        end
+
+        current_user = User.find_by(id: params[:current_user_id])
+        if current_user.blank?
+          render json: { error_message: "user_id #{params[:current_user_id]} not exist" },
+                 status: :not_found
+        end
+
+        render json: { data: current_user.followed }
+      end
     end
   end
 end
