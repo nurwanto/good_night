@@ -1,2 +1,7 @@
 /log/development.log
 .byebug_history
+db/development.sqlite3
+db/test.sqlite3
+log/test.log
+tmp/pids/server.pid
+tmp/restart.txt
