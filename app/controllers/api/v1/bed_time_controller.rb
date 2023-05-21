@@ -29,7 +29,7 @@ module Api
 
         data = []
         followed.each do |follower|
-          bed_time_histories = follower.bed_time_histories.map do |x|
+          bed_time_histories = follower.bed_time_histories.where('created_at >= ?', 1.week.ago).map do |x|
             { bed_time: x.bed_time, wake_up_time: x.wake_up_time, duration: (x.wake_up_time - x.bed_time) }
           end
 
@@ -57,10 +57,11 @@ module Api
                         status: :not_found
         end
 
+        system_time = Time.now
         case params[:type].to_s
         when 'bed_time'
           if current_user.bed_time_histories&.last&.wake_up_time.present?
-            BedTimeHistory.create!(bed_time: Time.now, user_id: current_user.id)
+            BedTimeHistory.create!(bed_time: system_time, user_id: current_user.id)
           else
             return render json: { error_message: "you haven't woken up yet" },
                           status: :bad_request
@@ -68,7 +69,7 @@ module Api
         when 'wake_up'
           last_history = current_user.bed_time_histories&.last
           if last_history&.bed_time.present? && last_history&.wake_up_time.blank?
-            last_history.update!(wake_up_time: Time.now)
+            last_history.update!(wake_up_time: system_time)
           else
             return render json: { error_message: "you haven't slept yet" },
                           status: :bad_request
@@ -78,7 +79,7 @@ module Api
                         status: :bad_request
         end
 
-        render json: { message: "#{params[:type]} has been successfully updated" }
+        render json: { message: "#{params[:type]} has been successfully updated at #{system_time}" }
       end
     end
   end
