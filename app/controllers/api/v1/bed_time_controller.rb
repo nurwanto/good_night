@@ -1,7 +1,7 @@
 module Api
   module V1
     class BedTimeController < ApplicationController
-      include Api::V1::BedTimeHelper
+      include Api::V1::GeneralHelper
       protect_from_forgery with: :null_session
 
       rescue_from ArgumentError do |e|
