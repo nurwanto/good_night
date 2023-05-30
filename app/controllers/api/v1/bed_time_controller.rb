@@ -17,6 +17,7 @@ module Api
       def history
         authenticate!
 
+        # TODO: add pagination
         sql_query = "SELECT bth.id, bth.user_id, bth.bed_time, bth.wake_up_time, ROUND((JULIANDAY(bth.wake_up_time) - JULIANDAY(bth.bed_time)) * 86400) as duration FROM user_followers uf INNER JOIN bed_time_histories bth ON bth.user_id = uf.followed_id WHERE bth.created_at >= \"#{10.week.ago}\" AND uf.follower_id = #{@current_user.id} ORDER BY duration DESC"
         data = ActiveRecord::Base.connection.execute(sql_query)
 
